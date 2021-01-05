@@ -1,4 +1,4 @@
-NpgSQLStorageFacade [![Status Zero][status-zero]][andivionian-status-classifier]
+NpgSQLStorageFacade [![Status Zero][status-zero]]
 ==========
 
 NpgSQLStorageFacade is a Getting Things Done (GTD) framework that 
