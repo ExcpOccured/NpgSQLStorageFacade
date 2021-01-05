@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Npgsql.StorageFacade.Common.Models.Arguments;
 
-namespace Npgsql.StorageFacade.Common.Procedure
+namespace Npgsql.StorageFacade.Common.Services.Interfaces
 {
     [PublicAPI]
     public interface INpgsqlCommandBuilder

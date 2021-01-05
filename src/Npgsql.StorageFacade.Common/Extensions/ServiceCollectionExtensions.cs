@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Npgsql.StorageFacade.Common.Procedure;
+using Npgsql.StorageFacade.Common.Services.Interfaces;
 
 namespace Npgsql.StorageFacade.Common.Extensions
 {
@@ -12,7 +12,7 @@ namespace Npgsql.StorageFacade.Common.Extensions
 
         private static void RegisterInternalTypes(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<INpgsqlCommandBuilder, Npgsql.StorageFacade.Common.Procedure.NpgsqlCommandBuilder>();
+            serviceCollection.AddSingleton<INpgsqlCommandBuilder, Services.NpgsqlCommandBuilder>();
         }
     }
 }

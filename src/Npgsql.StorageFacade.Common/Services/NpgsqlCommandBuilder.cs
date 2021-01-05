@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Npgsql.StorageFacade.Common.Models.Arguments;
+using Npgsql.StorageFacade.Common.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Common.Procedure
+namespace Npgsql.StorageFacade.Common.Services
 {
     public class NpgsqlCommandBuilder : INpgsqlCommandBuilder
     {

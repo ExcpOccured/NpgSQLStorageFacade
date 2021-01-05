@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Npgsql.StorageFacade.SDK.Domain.Helpers
+namespace Npgsql.StorageFacade.Common.Helpers
 {
     public static class RetryTaskHelper
     {
