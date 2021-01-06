@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Npgsql.StorageFacade.Sdk.Models.Arguments;
 using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
@@ -19,6 +20,10 @@ namespace Npgsql.StorageFacade.Sdk.Services
             {
                 CommandText = queryString
             };
+
+            var delegateTable = new Dictionary<Func<bool>, Action>();
+
+            delegateTable.First(x => x.Key.Invoke());
 
             foreach (var argument in commandArguments)
             {
