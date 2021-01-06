@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Npgsql.StorageFacade.Common.Services.Interfaces;
+using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Common.Extensions
+namespace Npgsql.StorageFacade.Sdk.Extensions
 {
     public static class ServiceCollectionExtensions
     {

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Npgsql.StorageFacade.Common.Helpers
+namespace Npgsql.StorageFacade.Sdk.Helpers
 {
     public static class RetryTaskHelper
     {
@@ -13,6 +13,15 @@ namespace Npgsql.StorageFacade.Common.Helpers
             ILogger logger)
         {
             await RetryOnExceptionAsync<Exception>(times, delayInSeconds, operation, logger);
+        }
+
+        public static async Task RetryOnExceptionAsync(
+            int times,
+            int delayInSeconds,
+            Task operation,
+            ILogger logger)
+        {
+            await RetryOnExceptionAsync<Exception>(times, delayInSeconds, () => operation, logger);
         }
 
         private static async Task RetryOnExceptionAsync<TException>(

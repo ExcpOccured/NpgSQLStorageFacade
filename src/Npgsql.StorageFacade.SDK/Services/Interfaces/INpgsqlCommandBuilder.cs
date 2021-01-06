@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
-using Npgsql.StorageFacade.Common.Models.Arguments;
+using Npgsql.StorageFacade.Sdk.Models.Arguments;
 
-namespace Npgsql.StorageFacade.Common.Services.Interfaces
+namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
 {
     [PublicAPI]
     public interface INpgsqlCommandBuilder

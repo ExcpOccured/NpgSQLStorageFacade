@@ -3,7 +3,7 @@ using System.Data.Common;
 using JetBrains.Annotations;
 using NpgsqlTypes;
 
-namespace Npgsql.StorageFacade.Common.Extensions
+namespace Npgsql.StorageFacade.Sdk.Extensions
 {
     [PublicAPI]
     public static class NpgsqlParameterCollectionExtensions

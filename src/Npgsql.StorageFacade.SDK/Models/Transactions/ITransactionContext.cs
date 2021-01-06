@@ -1,4 +1,4 @@
-﻿namespace Npgsql.StorageFacade.Common.Models.Transactions
+﻿namespace Npgsql.StorageFacade.Sdk.Models.Transactions
 {
     public interface ITransactionContext
     {

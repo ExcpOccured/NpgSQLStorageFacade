@@ -3,62 +3,66 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Npgsql.StorageFacade.Common.Helpers;
-using Npgsql.StorageFacade.Common.Services.Interfaces;
+using Npgsql.StorageFacade.Sdk.Helpers;
+using Npgsql.StorageFacade.Sdk.Options;
+using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Common.Services
+namespace Npgsql.StorageFacade.Sdk.Services
 {
     public class ConnectionManager : IConnectionManager
     {
         public async Task<NpgsqlConnection> TryOpenOrRepairConnectionAsync(
-            string connectionString,
+            DbConnectionOptions connectionOptions,
             ILogger logger,
             NpgsqlConnection existingConnection = null,
             CancellationToken cancellationToken = default)
         {
             const string logOpenedConnectionInformationMessage = "Npgsql database connection already open";
 
-            if (string.IsNullOrEmpty(connectionString))
+            if (string.IsNullOrEmpty(connectionOptions.ConnectionString))
             {
-                throw new ArgumentException(nameof(connectionString));
+                throw new ArgumentException(nameof(connectionOptions.ConnectionString));
+            }
+            
+            using var cancellationTokenSource = new CancellationTokenSource(30_000);
+
+            if (cancellationToken == CancellationToken.None)
+            {
+                cancellationToken = cancellationTokenSource.Token;
             }
 
-            if (!(existingConnection?.State is ConnectionState.Open))
+            if (!(existingConnection is {State: ConnectionState.Open}))
+            {
                 return await TryOpenOrRepairConnectionInternalAsync(
-                    connectionString,
+                    connectionOptions,
                     logger,
                     existingConnection,
                     cancellationToken);
+            }
 
             logger.LogInformation(logOpenedConnectionInformationMessage);
             return existingConnection;
         }
 
-        private async Task<NpgsqlConnection> TryOpenOrRepairConnectionInternalAsync(
-            string connectionString,
+        private static async Task<NpgsqlConnection> TryOpenOrRepairConnectionInternalAsync(
+            DbConnectionOptions connectionOptions,
             ILogger logger,
             NpgsqlConnection existingConnection,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken)
         {
-            existingConnection = new NpgsqlConnection(connectionString);
-            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionString);
+            existingConnection = new NpgsqlConnection(connectionOptions.ConnectionString);
+            var connectionStringBuilder = new NpgsqlConnectionStringBuilder(connectionOptions.ConnectionString);
 
             logger.LogInformation($"A connection opens for {connectionStringBuilder.Database}");
-
-            using var cancellationTokenSource = new CancellationTokenSource(30_000);
-
-            cancellationToken = cancellationToken == CancellationToken.None
-                ? cancellationTokenSource.Token
-                : cancellationToken;
 
             try
             {
                 await RetryTaskHelper.RetryOnExceptionAsync(
-                    3,
-                    5,
-                    () => existingConnection.OpenAsync(cancellationToken),
+                    connectionOptions.RetryCount,
+                    connectionOptions.DelayInSeconds,
+                    existingConnection.OpenAsync(cancellationToken),
                     logger);
-                
+
                 return existingConnection;
             }
             catch (Exception exception)
