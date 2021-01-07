@@ -14,7 +14,7 @@ namespace Npgsql.StorageFacade.Tests.Unit
 
         static UnitTestBasics()
         {
-            const string settingsName = "appsettings.json";
+            const string settingsName = "tests.configure.json";
 
             var serviceCollection = new ServiceCollection()
                 .AddLogging()

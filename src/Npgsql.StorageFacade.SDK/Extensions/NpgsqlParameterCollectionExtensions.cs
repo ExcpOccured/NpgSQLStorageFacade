@@ -21,7 +21,7 @@ namespace Npgsql.StorageFacade.Sdk.Extensions
         public static NpgsqlParameter AddWithNullableValue(
             this DbParameterCollection parameterCollection, 
             string name,
-            object value)
+            object? value)
         {
             return parameterCollection.AddWithValue(name, value ?? DBNull.Value);
         }

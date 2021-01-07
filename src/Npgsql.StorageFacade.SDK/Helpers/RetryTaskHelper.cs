@@ -58,16 +58,16 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
         private static Task CreateDelayForException(
             int times,
             int attempts,
-            int delayInSeconds,
+            int delayInMilliseconds,
             ILogger logger,
             Exception exception)
         {
-            delayInSeconds += IncreasingDelayInSeconds(attempts);
+            delayInMilliseconds += IncreasingDelayInSeconds(attempts);
 
             logger.LogWarning($"Exception on attempt {attempts} of {times}. " +
-                              $"Will retry after sleeping for {delayInSeconds}.", exception);
+                              $"Will retry after sleeping for {delayInMilliseconds}.", exception);
 
-            return Task.Delay(TimeSpan.FromSeconds(delayInSeconds));
+            return Task.Delay(TimeSpan.FromMilliseconds(delayInMilliseconds));
         }
 
         private static int IncreasingDelayInSeconds(int failedAttempts)
