@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace Npgsql.StorageFacade.SDK.Domain.Helpers
+namespace Npgsql.StorageFacade.Sdk.Helpers
 {
     public static class RetryTaskHelper
     {
@@ -13,6 +13,15 @@ namespace Npgsql.StorageFacade.SDK.Domain.Helpers
             ILogger logger)
         {
             await RetryOnExceptionAsync<Exception>(times, delayInSeconds, operation, logger);
+        }
+
+        public static async Task RetryOnExceptionAsync(
+            int times,
+            int delayInSeconds,
+            Task operation,
+            ILogger logger)
+        {
+            await RetryOnExceptionAsync<Exception>(times, delayInSeconds, () => operation, logger);
         }
 
         private static async Task RetryOnExceptionAsync<TException>(
@@ -49,16 +58,16 @@ namespace Npgsql.StorageFacade.SDK.Domain.Helpers
         private static Task CreateDelayForException(
             int times,
             int attempts,
-            int delayInSeconds,
+            int delayInMilliseconds,
             ILogger logger,
             Exception exception)
         {
-            delayInSeconds += IncreasingDelayInSeconds(attempts);
+            delayInMilliseconds += IncreasingDelayInSeconds(attempts);
 
             logger.LogWarning($"Exception on attempt {attempts} of {times}. " +
-                              $"Will retry after sleeping for {delayInSeconds}.", exception);
+                              $"Will retry after sleeping for {delayInMilliseconds}.", exception);
 
-            return Task.Delay(TimeSpan.FromSeconds(delayInSeconds));
+            return Task.Delay(TimeSpan.FromMilliseconds(delayInMilliseconds));
         }
 
         private static int IncreasingDelayInSeconds(int failedAttempts)

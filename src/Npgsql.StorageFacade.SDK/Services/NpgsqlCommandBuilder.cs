@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Npgsql.StorageFacade.Common.Models.Arguments;
+using System.Linq;
+using Npgsql.StorageFacade.Sdk.Models.Arguments;
+using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Common.Procedure
+namespace Npgsql.StorageFacade.Sdk.Services
 {
     public class NpgsqlCommandBuilder : INpgsqlCommandBuilder
     {
@@ -18,6 +20,10 @@ namespace Npgsql.StorageFacade.Common.Procedure
             {
                 CommandText = queryString
             };
+
+            var delegateTable = new Dictionary<Func<bool>, Action>();
+
+            delegateTable.First(x => x.Key.Invoke());
 
             foreach (var argument in commandArguments)
             {

@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Npgsql.StorageFacade.Common\Npgsql.StorageFacade.Common.csproj" />
+      <ProjectReference Include="..\Npgsql.StorageFacade.Sdk\Npgsql.StorageFacade.Sdk.csproj" />
     </ItemGroup>
 
 </Project>

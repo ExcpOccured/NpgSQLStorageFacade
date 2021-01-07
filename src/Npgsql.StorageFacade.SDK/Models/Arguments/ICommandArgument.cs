@@ -1,4 +1,4 @@
-﻿namespace Npgsql.StorageFacade.Common.Models.Arguments
+﻿namespace Npgsql.StorageFacade.Sdk.Models.Arguments
 {
     public interface ICommandArgument
     {

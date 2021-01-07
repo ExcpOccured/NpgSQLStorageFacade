@@ -3,7 +3,7 @@ using System.Data.Common;
 using JetBrains.Annotations;
 using NpgsqlTypes;
 
-namespace Npgsql.StorageFacade.Common.Extensions
+namespace Npgsql.StorageFacade.Sdk.Extensions
 {
     [PublicAPI]
     public static class NpgsqlParameterCollectionExtensions
@@ -21,7 +21,7 @@ namespace Npgsql.StorageFacade.Common.Extensions
         public static NpgsqlParameter AddWithNullableValue(
             this DbParameterCollection parameterCollection, 
             string name,
-            object value)
+            object? value)
         {
             return parameterCollection.AddWithValue(name, value ?? DBNull.Value);
         }
