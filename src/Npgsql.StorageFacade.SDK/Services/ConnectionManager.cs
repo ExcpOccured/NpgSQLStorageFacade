@@ -12,7 +12,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
     public class ConnectionManager : IConnectionManager
     {
         public async Task<NpgsqlConnection> TryOpenConnectionAsync(
-            DbConnectionOptions connectionOptions, 
+            StorageFacadeOptions connectionOptions, 
             ILogger logger,
             CancellationToken cancellationToken = default)
         {
@@ -35,7 +35,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
         }
 
         public async Task<NpgsqlConnection> TryRepairConnectionAsync(
-            DbConnectionOptions connectionOptions, 
+            StorageFacadeOptions connectionOptions, 
             ILogger logger,
             NpgsqlConnection existingConnection, 
             CancellationToken cancellationToken = default)
@@ -68,7 +68,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
         }
 
         private static async Task<NpgsqlConnection> TryOpenOrRepairConnectionInternalAsync(
-            DbConnectionOptions connectionOptions,
+            StorageFacadeOptions connectionOptions,
             ILogger logger,
             CancellationToken cancellationToken,
             NpgsqlConnection? existingConnection = null)

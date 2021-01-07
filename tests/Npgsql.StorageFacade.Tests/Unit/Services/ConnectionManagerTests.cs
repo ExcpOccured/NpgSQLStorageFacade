@@ -8,11 +8,11 @@ namespace Npgsql.StorageFacade.Tests.Unit.Services
 {
     public class ConnectionManagerTests : UnitTestBasics
     {
-        private readonly DbConnectionOptions _options;
+        private readonly StorageFacadeOptions _options;
 
         public ConnectionManagerTests()
         {
-            _options = GetOptions<DbConnectionOptions>();
+            _options = GetOptions<StorageFacadeOptions>();
         }
 
         [Fact]
