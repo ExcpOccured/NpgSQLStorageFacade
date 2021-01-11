@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql.StorageFacade.Sdk.Extensions;
@@ -43,10 +42,10 @@ namespace Npgsql.StorageFacade.Tests.Unit
             return Configuration.ReadConfiguredOptions<T>();
         }
 
-        protected static T GetService<T>(Type typeService)
+        protected static T GetService<T>()
             where T : class
         {
-            return (T)ServiceProvider.GetService(typeService);
+            return (T)ServiceProvider.GetService(typeof(T));
         }
     }
 }

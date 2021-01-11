@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Npgsql.StorageFacade.Sdk.Extensions;
 using Npgsql.StorageFacade.Sdk.Models.Arguments;
 using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
@@ -9,28 +9,20 @@ namespace Npgsql.StorageFacade.Sdk.Services
     public class NpgsqlCommandBuilder : INpgsqlCommandBuilder
     {
         public NpgsqlCommand BuildCommand(
-            Func<IEnumerable<ICommandArgument>, string> buildQueryDelegate,
+            Func<IEnumerable<ICommandArgument>, NpgsqlCommand> buildCommandDelegate,
             List<ICommandArgument> commandArguments,
             Func<string, bool> validateCommandArgumentsDelegate = null)
         {
-            var queryString = buildQueryDelegate.Invoke(commandArguments);
-            validateCommandArgumentsDelegate?.Invoke(queryString);
+            var command = buildCommandDelegate.Invoke(commandArguments);
 
-            var sqlCommand = new NpgsqlCommand
+            if (!validateCommandArgumentsDelegate?.Invoke(command.CommandText) ?? true)
             {
-                CommandText = queryString
-            };
-
-            var delegateTable = new Dictionary<Func<bool>, Action>();
-
-            delegateTable.First(x => x.Key.Invoke());
-
-            foreach (var argument in commandArguments)
-            {
-                sqlCommand.Parameters.AddWithValue(argument.ArgumentVariableName, argument.ArgumentVariableValue);
+                throw new ArgumentException(nameof(command.CommandText));
             }
 
-            return sqlCommand;
+            command.Parameters.AddRangeWithArguments(commandArguments);
+
+            return command;
         }
     }
 }

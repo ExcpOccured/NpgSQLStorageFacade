@@ -18,7 +18,7 @@ namespace Npgsql.StorageFacade.Tests.Unit.Services
         [Fact]
         public async Task TryOpenConnectionAsync_Successfully()
         {
-            var connectionManager = GetService<IConnectionManager>(typeof(IConnectionManager));
+            var connectionManager = GetService<IConnectionManager>();
 
             await using var connection = await connectionManager.TryOpenConnectionAsync(
                 _options,

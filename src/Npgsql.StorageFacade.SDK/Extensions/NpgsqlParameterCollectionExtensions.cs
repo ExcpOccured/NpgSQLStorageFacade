@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
 using JetBrains.Annotations;
+using Npgsql.StorageFacade.Sdk.Models.Arguments;
 using NpgsqlTypes;
 
 namespace Npgsql.StorageFacade.Sdk.Extensions
@@ -16,6 +18,16 @@ namespace Npgsql.StorageFacade.Sdk.Extensions
             var parameter = new NpgsqlParameter(name, value);
             parameterCollection.Add(parameter);
             return parameter;
+        }
+
+        public static void AddRangeWithArguments(
+            this DbParameterCollection parameterCollection,
+            List<ICommandArgument> commandArguments)
+        {
+            foreach (var argument in commandArguments)
+            {
+                parameterCollection.AddWithValue(argument.ArgumentVariableName, argument.ArgumentVariableValue);
+            }
         }
 
         public static NpgsqlParameter AddWithNullableValue(
