@@ -9,7 +9,7 @@ namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
     public interface INpgsqlCommandBuilder
     {
         NpgsqlCommand BuildCommand(
-            Func<IEnumerable<ICommandArgument>, string> buildQueryDelegate,
+            Func<IEnumerable<ICommandArgument>, NpgsqlCommand> buildCommandDelegate,
             List<ICommandArgument> commandArguments,
             Func<string, bool> validateCommandArgumentsDelegate = null);
     }
