@@ -1,4 +1,4 @@
-﻿namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
+﻿namespace Npgsql.StorageFacade.Sdk.Command
 {
     public class ITransactionBuilder
     {

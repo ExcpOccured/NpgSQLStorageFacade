@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Npgsql.StorageFacade.Sdk.Models.Arguments;
 
-namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
+namespace Npgsql.StorageFacade.Sdk.Command
 {
     [PublicAPI]
     public interface INpgsqlCommandBuilder
@@ -11,6 +11,6 @@ namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
         NpgsqlCommand BuildCommand(
             Func<IEnumerable<ICommandArgument>, string> buildQueryDelegate,
             List<ICommandArgument> commandArguments,
-            Func<string, bool> validateCommandArgumentsDelegate = null);
+            Func<string, bool>? validateCommandArgumentsDelegate = null);
     }
 }

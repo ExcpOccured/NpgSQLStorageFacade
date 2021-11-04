@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using System.Threading.Tasks;
+using Npgsql.StorageFacade.Sdk.Connection;
 using Npgsql.StorageFacade.Sdk.Options;
-using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 using Xunit;
 
 namespace Npgsql.StorageFacade.Tests.Unit.Services

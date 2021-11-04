@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Npgsql.StorageFacade.Sdk.Helpers;
 using Npgsql.StorageFacade.Sdk.Options;
-using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Sdk.Services
+namespace Npgsql.StorageFacade.Sdk.Connection
 {
     public class ConnectionManager : IConnectionManager
     {
@@ -82,7 +81,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
             {
                 await RetryTaskHelper.RetryOnExceptionAsync(
                     connectionOptions.RetryCount,
-                    connectionOptions.DelayInSeconds,
+                    connectionOptions.DelayInMilliseconds,
                     existingConnection.OpenAsync(cancellationToken),
                     logger);
 

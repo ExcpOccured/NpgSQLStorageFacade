@@ -20,7 +20,7 @@ namespace Npgsql.StorageFacade.Tests.Unit
                 .AddLogging()
                 .AddOptions();
 
-            serviceCollection.RegisterStorageFacade();
+            //serviceCollection.RegisterStorageFacade();
 
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
@@ -30,11 +30,11 @@ namespace Npgsql.StorageFacade.Tests.Unit
             Configuration = builder.Build();
         }
 
-        protected static ILogger<T> GetLogger<T>()
-            where T : class
+        protected static ILogger<TLogger> GetLogger<TLogger>()
+            where TLogger : class
         {
             var factory = ServiceProvider.GetService<ILoggerFactory>();
-            return factory.CreateLogger<T>();
+            return factory.CreateLogger<TLogger>();
         }
 
         protected static T GetOptions<T>()
@@ -43,10 +43,10 @@ namespace Npgsql.StorageFacade.Tests.Unit
             return Configuration.ReadConfiguredOptions<T>();
         }
 
-        protected static T GetService<T>(Type typeService)
-            where T : class
+        protected static TService GetService<TService>(Type typeService)
+            where TService : class
         {
-            return (T)ServiceProvider.GetService(typeService);
+            return (TService)ServiceProvider.GetService(typeService);
         }
     }
 }

@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Npgsql.StorageFacade.Sdk.Options;
 
-namespace Npgsql.StorageFacade.Sdk.Services.Interfaces
+namespace Npgsql.StorageFacade.Sdk.Connection
 {
     [PublicAPI]
     public interface IConnectionManager
