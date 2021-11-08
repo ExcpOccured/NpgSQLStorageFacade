@@ -3,73 +3,68 @@ using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Npgsql.StorageFacade.Sdk.Helpers;
 using Npgsql.StorageFacade.Sdk.Options;
-using Npgsql.StorageFacade.Sdk.Services.Interfaces;
 
-namespace Npgsql.StorageFacade.Sdk.Services
+namespace Npgsql.StorageFacade.Sdk.Connection
 {
     public class ConnectionManager : IConnectionManager
     {
+        private readonly StorageFacadeOptions _options;
+
+        public ConnectionManager(IOptions<StorageFacadeOptions> options)
+        {
+            _options = options.Value;
+        }
+
         public async Task<NpgsqlConnection> TryOpenConnectionAsync(
-            StorageFacadeOptions connectionOptions, 
-            ILogger logger,
+            ILogger? logger = null,
             CancellationToken cancellationToken = default)
         {
-            if (string.IsNullOrEmpty(connectionOptions.ConnectionString))
-            {
-                throw new ArgumentException(nameof(connectionOptions.ConnectionString));
-            }
-            
-            using var cancellationTokenSource = new CancellationTokenSource(30_000);
+            using var cancellationTokenSource = new CancellationTokenSource(_options.DelayInMilliseconds);
 
-            if (cancellationToken == CancellationToken.None)
+            if (cancellationToken == default)
             {
                 cancellationToken = cancellationTokenSource.Token;
             }
             
-            return await TryOpenOrRepairConnectionInternalAsync(
-                connectionOptions,
+            return await TryOpenConnectionInternalAsync(
+                _options,
                 logger,
                 cancellationToken);
         }
 
         public async Task<NpgsqlConnection> TryRepairConnectionAsync(
-            StorageFacadeOptions connectionOptions, 
-            ILogger logger,
             NpgsqlConnection existingConnection, 
+            ILogger? logger = null,
             CancellationToken cancellationToken = default)
         {
             const string logOpenedConnectionInformationMessage = "Npgsql database connection already open";
+            
+            using var cancellationTokenSource = new CancellationTokenSource();
 
-            if (string.IsNullOrEmpty(connectionOptions.ConnectionString))
-            {
-                throw new ArgumentException(nameof(connectionOptions.ConnectionString));
-            }
-
-            using var cancellationTokenSource = new CancellationTokenSource(30_000);
-
-            if (cancellationToken == CancellationToken.None)
+            if (cancellationToken == default)
             {
                 cancellationToken = cancellationTokenSource.Token;
             }
 
-            if (!(existingConnection is {State: ConnectionState.Open}))
+            if (existingConnection is not {State: ConnectionState.Open})
             {
-                return await TryOpenOrRepairConnectionInternalAsync(
-                    connectionOptions,
+                return await TryOpenConnectionInternalAsync(
+                    _options,
                     logger,
                     cancellationToken,
                     existingConnection);
             }
 
-            logger.LogInformation(logOpenedConnectionInformationMessage);
+            logger?.LogInformation(logOpenedConnectionInformationMessage);
             return existingConnection;
         }
 
-        private static async Task<NpgsqlConnection> TryOpenOrRepairConnectionInternalAsync(
+        private static async Task<NpgsqlConnection> TryOpenConnectionInternalAsync(
             StorageFacadeOptions connectionOptions,
-            ILogger logger,
+            ILogger? logger,
             CancellationToken cancellationToken,
             NpgsqlConnection? existingConnection = null)
         {
@@ -82,7 +77,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
             {
                 await RetryTaskHelper.RetryOnExceptionAsync(
                     connectionOptions.RetryCount,
-                    connectionOptions.DelayInSeconds,
+                    connectionOptions.DelayInMilliseconds,
                     existingConnection.OpenAsync(cancellationToken),
                     logger);
 
@@ -90,7 +85,7 @@ namespace Npgsql.StorageFacade.Sdk.Services
             }
             catch (Exception exception)
             {
-                logger.LogError(exception.Message, exception);
+                logger.LogError(exception?.Message, exception);
                 existingConnection?.DisposeAsync();
                 throw;
             }

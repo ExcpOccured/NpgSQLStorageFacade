@@ -4,6 +4,8 @@
         <TargetFramework>net5.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
+
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +25,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\Npgsql.StorageFacade.Sdk\Npgsql.StorageFacade.Sdk.csproj" />
+      <ProjectReference Include="..\..\src\Npgsql.StorageFacade\Npgsql.StorageFacade.csproj" />
     </ItemGroup>
 
     <ItemGroup>

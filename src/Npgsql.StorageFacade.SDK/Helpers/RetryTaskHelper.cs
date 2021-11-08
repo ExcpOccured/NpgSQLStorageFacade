@@ -10,7 +10,7 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
             int times,
             int delayInSeconds,
             Func<Task> operation,
-            ILogger logger)
+            ILogger? logger)
         {
             await RetryOnExceptionAsync<Exception>(times, delayInSeconds, operation, logger);
         }
@@ -19,7 +19,7 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
             int times,
             int delayInSeconds,
             Task operation,
-            ILogger logger)
+            ILogger? logger)
         {
             await RetryOnExceptionAsync<Exception>(times, delayInSeconds, () => operation, logger);
         }
@@ -28,7 +28,7 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
             int times,
             int delayInSeconds,
             Func<Task> operation,
-            ILogger logger)
+            ILogger? logger)
             where TException : Exception
         {
             if (times <= 0)
@@ -59,12 +59,12 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
             int times,
             int attempts,
             int delayInMilliseconds,
-            ILogger logger,
+            ILogger? logger,
             Exception exception)
         {
             delayInMilliseconds += IncreasingDelayInSeconds(attempts);
 
-            logger.LogWarning($"Exception on attempt {attempts} of {times}. " +
+            logger?.LogWarning($"Exception on attempt {attempts} of {times}. " +
                               $"Will retry after sleeping for {delayInMilliseconds}.", exception);
 
             return Task.Delay(TimeSpan.FromMilliseconds(delayInMilliseconds));

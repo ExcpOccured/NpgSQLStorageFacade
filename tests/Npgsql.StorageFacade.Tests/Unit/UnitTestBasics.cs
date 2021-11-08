@@ -2,7 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Npgsql.StorageFacade.Sdk.Extensions;
+using Npgsql.StorageFacade.Tests.Extensions;
+using Npgsql.StorageFacade.Tests.Options;
 
 namespace Npgsql.StorageFacade.Tests.Unit
 {
@@ -14,39 +15,42 @@ namespace Npgsql.StorageFacade.Tests.Unit
 
         static UnitTestBasics()
         {
+            //Hardcoded value, hidden(git ignore) for the purpose of data privacy
             const string settingsName = "tests.configure.json";
 
-            var serviceCollection = new ServiceCollection()
+            IServiceCollection services = new ServiceCollection()
                 .AddLogging()
                 .AddOptions();
 
-            serviceCollection.RegisterStorageFacade();
-
-            ServiceProvider = serviceCollection.BuildServiceProvider();
-
             var builder = new ConfigurationBuilder()
-                .AddJsonFile(settingsName, false, true);
+                .AddJsonFile(settingsName, false, false);
 
             Configuration = builder.Build();
+
+            services.Configure<StorageFacadeTestOptions>(options => GetOptions<StorageFacadeTestOptions>());
+            
+            services.AddNpgSqlStorageFacade<StorageFacadeTestOptions>();
+            
+            ServiceProvider = services.BuildServiceProvider();
         }
 
-        protected static ILogger<T> GetLogger<T>()
-            where T : class
+        protected static ILogger<TLogger> GetLogger<TLogger>()
+            where TLogger : class
         {
             var factory = ServiceProvider.GetService<ILoggerFactory>();
-            return factory.CreateLogger<T>();
+            return factory.CreateLogger<TLogger>();
         }
 
-        protected static T GetOptions<T>()
-            where T : class, new()
+        private static TOptions GetOptions<TOptions>()
+            where TOptions : class, new()
         {
-            return Configuration.ReadConfiguredOptions<T>();
+            return Configuration.ReadConfiguredOptions<TOptions>();
         }
 
-        protected static T GetService<T>(Type typeService)
-            where T : class
+        protected static TService GetService<TService>(Type typeService)
+            where TService : class
         {
-            return (T)ServiceProvider.GetService(typeService);
+            return (TService)ServiceProvider.GetRequiredService(typeService);
         }
     }
 }
