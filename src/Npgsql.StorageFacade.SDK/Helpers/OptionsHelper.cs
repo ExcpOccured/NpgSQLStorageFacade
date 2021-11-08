@@ -1,6 +1,5 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Npgsql.StorageFacade.Sdk.Extensions;
 using Npgsql.StorageFacade.Sdk.Options;
 
 namespace Npgsql.StorageFacade.Sdk.Helpers
@@ -10,7 +9,7 @@ namespace Npgsql.StorageFacade.Sdk.Helpers
         public static TOptions GetOptionsWithValidation<TOptions>(this IServiceProvider provider)
             where TOptions : class, IOptions, new()
         {
-            var options = provider.GetRequiredService<IOptions<TOptions>>().Value;
+            var options = provider.GetOptionsValue<TOptions>();
 
             if (!options.Validate(out var errors))
             {

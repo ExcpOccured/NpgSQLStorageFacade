@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Npgsql.StorageFacade.Sdk.Models.Arguments;
 
 namespace Npgsql.StorageFacade.Sdk.Command
@@ -10,7 +9,7 @@ namespace Npgsql.StorageFacade.Sdk.Command
         public NpgsqlCommand BuildCommand(
             Func<IEnumerable<ICommandArgument>, string> buildQueryDelegate,
             List<ICommandArgument> commandArguments,
-            Func<string, bool> validateCommandArgumentsDelegate = null)
+            Func<string, bool>? validateCommandArgumentsDelegate = null)
         {
             var queryString = buildQueryDelegate.Invoke(commandArguments);
             validateCommandArgumentsDelegate?.Invoke(queryString);
@@ -19,10 +18,6 @@ namespace Npgsql.StorageFacade.Sdk.Command
             {
                 CommandText = queryString
             };
-
-            var delegateTable = new Dictionary<Func<bool>, Action>();
-
-            delegateTable.First(x => x.Key.Invoke());
 
             foreach (var argument in commandArguments)
             {

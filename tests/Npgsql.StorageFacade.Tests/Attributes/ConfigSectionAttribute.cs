@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Npgsql.StorageFacade.Sdk.Attributes
+namespace Npgsql.StorageFacade.Tests.Attributes
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class ConfigSectionAttribute : Attribute

@@ -4,7 +4,7 @@ using Npgsql.StorageFacade.Sdk.Models;
 
 namespace Npgsql.StorageFacade.Sdk.Options
 {
-    public class StorageFacadeOptions : IStorageFacadeOptions, IOptions
+    public class StorageFacadeOptions : IStorageFacadeOptions
     {
         public int RetryCount { get; [UsedImplicitly] set; } = Constants.DefaultConnectionOpenRetryCount;
 

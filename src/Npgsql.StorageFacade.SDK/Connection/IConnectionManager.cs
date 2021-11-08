@@ -10,14 +10,13 @@ namespace Npgsql.StorageFacade.Sdk.Connection
     public interface IConnectionManager
     {
         Task<NpgsqlConnection> TryOpenConnectionAsync(
-            StorageFacadeOptions connectionOptions,
-            ILogger logger,
+            ILogger? logger = null,
             CancellationToken cancellationToken = default);
         
+        
         Task<NpgsqlConnection> TryRepairConnectionAsync(
-            StorageFacadeOptions connectionOptions,
-            ILogger logger,
             NpgsqlConnection existingConnection,
+            ILogger? logger = null,
             CancellationToken cancellationToken = default);
     }
 }

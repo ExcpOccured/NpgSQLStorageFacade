@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Npgsql.StorageFacade.Sdk.Options;
+﻿using Npgsql.StorageFacade.Sdk.Options;
 
 namespace Npgsql.StorageFacade
 {
@@ -7,9 +6,9 @@ namespace Npgsql.StorageFacade
     {
         private readonly IStorageFacadeOptions _options;
 
-        public StorageFacade(IOptions<IStorageFacadeOptions> options)
+        public StorageFacade(IStorageFacadeOptions options)
         {
-            _options = options.Value;
+            _options = options;
         }
     }
 }
